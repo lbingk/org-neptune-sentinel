@@ -1,5 +1,7 @@
 package com.neptune.sentinel.controller;
 
+import com.alibaba.csp.sentinel.slots.block.degrade.DegradeRule;
+import com.alibaba.csp.sentinel.slots.block.degrade.DegradeRuleManager;
 import com.alibaba.csp.sentinel.slots.block.flow.FlowRule;
 import com.alibaba.csp.sentinel.slots.block.flow.FlowRuleManager;
 import com.alibaba.fastjson.JSON;
@@ -20,4 +22,10 @@ public class RuleController {
         return flowRuleList;
     }
 
+    @RequestMapping("DegradeData")
+    public List<DegradeRule> degradeData() {
+        List<DegradeRule> degradeRuleList = DegradeRuleManager.getRules();
+        log.info("获取降级规则：[{}]", JSON.toJSONString(degradeRuleList));
+        return degradeRuleList;
+    }
 }

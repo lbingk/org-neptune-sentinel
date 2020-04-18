@@ -26,9 +26,12 @@ import java.util.concurrent.ConcurrentHashMap;
 
 import com.alibaba.csp.sentinel.dashboard.domain.Result;
 import com.alibaba.csp.sentinel.dashboard.repository.metric.MetricsRepository;
+import com.alibaba.fastjson.JSON;
+import lombok.extern.slf4j.Slf4j;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -42,15 +45,15 @@ import com.alibaba.csp.sentinel.dashboard.domain.vo.MetricVo;
 /**
  * @author leyou
  */
+@Slf4j
 @Controller
 @RequestMapping(value = "/metric", produces = MediaType.APPLICATION_JSON_VALUE)
 public class MetricController {
 
-    private static Logger logger = LoggerFactory.getLogger(MetricController.class);
-
     private static final long maxQueryIntervalMs = 1000 * 60 * 60;
 
     @Autowired
+    @Qualifier("influxDBMetricsRepository")
     private MetricsRepository<MetricEntity> metricStore;
 
     @ResponseBody
@@ -85,7 +88,8 @@ public class MetricController {
             return Result.ofFail(-1, "time intervalMs is too big, must <= 1h");
         }
         List<String> resources = metricStore.listResourcesOfApp(app);
-        logger.debug("queryTopResourceMetric(), resources.size()={}", resources.size());
+
+        log.info("queryTopResourceMetric(), resources={},resources.size()={}", JSON.toJSONString(resources), resources.size());
 
         if (resources == null || resources.isEmpty()) {
             return Result.ofSuccess(null);
@@ -106,20 +110,20 @@ public class MetricController {
         List<String> topResource = new ArrayList<>();
         if (pageIndex <= totalPage) {
             topResource = resources.subList((pageIndex - 1) * pageSize,
-                Math.min(pageIndex * pageSize, resources.size()));
+                    Math.min(pageIndex * pageSize, resources.size()));
         }
         final Map<String, Iterable<MetricVo>> map = new ConcurrentHashMap<>();
-        logger.debug("topResource={}", topResource);
+        log.info("topResource={}", topResource);
         long time = System.currentTimeMillis();
         for (final String resource : topResource) {
             List<MetricEntity> entities = metricStore.queryByAppAndResourceBetween(
-                app, resource, startTime, endTime);
-            logger.debug("resource={}, entities.size()={}", resource, entities == null ? "null" : entities.size());
+                    app, resource, startTime, endTime);
+            log.info("resource={}, entities.size()={}", resource, entities == null ? "null" : entities.size());
             List<MetricVo> vos = MetricVo.fromMetricEntities(entities, resource);
             Iterable<MetricVo> vosSorted = sortMetricVoAndDistinct(vos);
             map.put(resource, vosSorted);
         }
-        logger.debug("queryTopResourceMetric() total query time={} ms", System.currentTimeMillis() - time);
+        log.info("queryTopResourceMetric() total query time={} ms", System.currentTimeMillis() - time);
         Map<String, Object> resultMap = new HashMap<>(16);
         resultMap.put("totalCount", resources.size());
         resultMap.put("totalPage", totalPage);
@@ -154,7 +158,7 @@ public class MetricController {
             return Result.ofFail(-1, "time intervalMs is too big, must <= 1h");
         }
         List<MetricEntity> entities = metricStore.queryByAppAndResourceBetween(
-            app, identity, startTime, endTime);
+                app, identity, startTime, endTime);
         List<MetricVo> vos = MetricVo.fromMetricEntities(entities, identity);
         return Result.ofSuccess(sortMetricVoAndDistinct(vos));
     }
