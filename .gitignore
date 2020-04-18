@@ -1,0 +1,8 @@
+# Created by .ignore support plugin (hsz.mobi)
+.gitignore
+.idea/workspace.xml
+neptune-sentinel-dashboard/target/
+neptune-sentinel-sample/src/
+neptune-sentinel/neptune-sentinel-common/src/
+neptune-sentinel/neptune-sentinel-common/target/
+neptune-sentinel/neptune-sentinel-web-spring-boot-starter/target/

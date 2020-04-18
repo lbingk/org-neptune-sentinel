@@ -4,7 +4,11 @@
     <file url="file://$PROJECT_DIR$" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/neptune-sentinel" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/neptune-sentinel-dashboard" charset="UTF-8" />
-    <file url="file://$PROJECT_DIR$/neptune-sentinel-dashboard" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/neptune-sentinel-sample" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/neptune-sentinel-sample/neptune-sentinel-web-spring-boot-starter-sample" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/neptune-sentinel/neptune-sentinel-common" charset="UTF-8" />
     <file url="file://$PROJECT_DIR$/neptune-sentinel/neptune-sentinel-web-spring-boot-starter" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/../../../maven/mavenLocalRepository/com/alibaba/csp/sentinel-datasource-zookeeper/1.7.2" charset="UTF-8" />
+    <file url="file://$PROJECT_DIR$/../../../maven/mavenLocalRepository/com/alibaba/csp/sentinel-datasource-zookeeper/1.7.2" charset="UTF-8" />
   </component>
 </project>

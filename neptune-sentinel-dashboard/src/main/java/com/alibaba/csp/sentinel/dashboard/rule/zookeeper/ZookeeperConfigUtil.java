@@ -13,9 +13,10 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
-package com.alibaba.csp.sentinel.dashboard.zookeeper;
+package com.alibaba.csp.sentinel.dashboard.rule.zookeeper;
 
 
+import com.neptune.sentinel.RuleType;
 import org.apache.commons.lang.StringUtils;
 
 import java.net.InetAddress;
@@ -23,7 +24,12 @@ import java.net.UnknownHostException;
 
 public class ZookeeperConfigUtil {
     public static final String SENTINEL_GROUP = "/SENTINEL-DASHBOARD_APPLICATION";
-    public static final String RULE_ROOT_PATH = "/sentinel_rule_config";
+    public static final String RULE_ROOT_PATH = "/SENTINEL_RULE_CONFIG";
+    public static final String AUTHORITY_ROOT_PATH = "/SENTINEL_AUTHORITY_CONFIG";
+    public static final String HOT_ROOT_PATH = "/SENTINEL_HOT_CONFIG";
+    public static final String SYSTEM_ROOT_PATH = "/SENTINEL_SYSTEM_CONFIG";
+    public static final String DEGRADE_ROOT_PATH = "/SENTINEL_DEGRADE_CONFIG";
+    public static final String FOW_ROOT_PATH = "/SENTINEL_FLOW_CONFIG";
 
     public static final int RETRY_TIMES = 3;
     public static final int SLEEP_TIME = 1000;
@@ -39,8 +45,26 @@ public class ZookeeperConfigUtil {
         return "8081";
     }
 
-    public static String getPath(String appName) {
+    public static String getPath(String appName, RuleType ruleType) {
         StringBuilder stringBuilder = new StringBuilder(RULE_ROOT_PATH);
+        String nodeName = "";
+        switch (ruleType) {
+            case AUTHORITY:
+                nodeName = AUTHORITY_ROOT_PATH;
+                break;
+            case HOT:
+                nodeName = HOT_ROOT_PATH;
+                break;
+            case SYSTEM:
+                nodeName = SYSTEM_ROOT_PATH;
+                break;
+            case DEGRADE:
+                nodeName = DEGRADE_ROOT_PATH;
+                break;
+            case FLOW:
+                nodeName = FOW_ROOT_PATH;
+                break;
+        }
 
         if (StringUtils.isBlank(appName)) {
             return stringBuilder.toString();
@@ -51,8 +75,8 @@ public class ZookeeperConfigUtil {
             stringBuilder.append("/")
                     .append(appName);
         }
+
+        stringBuilder.append(nodeName);
         return stringBuilder.toString();
     }
-
-
 }

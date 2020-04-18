@@ -1,0 +1,22 @@
+[{
+	"app": "sentinel-demo-spring-webmvc-sample",
+	"clusterConfig": {
+		"fallbackToLocalWhenFail": true,
+		"sampleCount": 10,
+		"strategy": 0,
+		"thresholdType": 0,
+		"windowIntervalMs": 1000
+	},
+	"clusterMode": false,
+	"controlBehavior": 0,
+	"count": 1.23456789E9,
+	"gmtCreate": 1587129529884,
+	"gmtModified": 1587129529884,
+	"grade": 0,
+	"id": 1,
+	"ip": "192.168.31.128",
+	"limitApp": "default",
+	"port": 8720,
+	"resource": "adc",
+	"strategy": 0
+}]

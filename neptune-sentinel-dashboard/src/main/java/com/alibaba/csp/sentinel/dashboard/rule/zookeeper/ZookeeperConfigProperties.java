@@ -1,4 +1,4 @@
-package com.alibaba.csp.sentinel.dashboard.zookeeper;
+package com.alibaba.csp.sentinel.dashboard.rule.zookeeper;
 
 import lombok.Getter;
 import lombok.Setter;

@@ -1,5 +1,6 @@
-package com.alibaba.csp.sentinel.dashboard.zookeeper;
+package com.alibaba.csp.sentinel.dashboard.rule.zookeeper;
 
+import com.alibaba.csp.sentinel.dashboard.rule.zookeeper.ZookeeperConfigUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.curator.framework.CuratorFramework;
 import org.apache.zookeeper.CreateMode;
@@ -22,9 +23,8 @@ public class ToZookeeper implements InitializingBean {
 
     @Override
     public void afterPropertiesSet() throws Exception {
-
+        // 创建规则节点：初始化
         String ipPort = ZookeeperConfigUtil.getLocalIp() + ":" + ZookeeperConfigUtil.getLocalPort();
-
         Executors.newScheduledThreadPool(1).scheduleAtFixedRate(new Runnable() {
             @Override
             public void run() {
@@ -32,7 +32,7 @@ public class ToZookeeper implements InitializingBean {
                 try {
                     if (zkClient.checkExists().forPath(path) == null) {
                         // 父节点不存在的时候则自动创建，父节点为持久节点，子节点为指定类型
-                        zkClient.create().creatingParentContainersIfNeeded().withMode(CreateMode.EPHEMERAL).forPath(path);
+                        zkClient.create().creatingParentContainersIfNeeded().withMode(CreateMode.EPHEMERAL).forPath(path, ipPort.getBytes());
                         log.info("注册控制台信息到zookeeper：[{}]", ipPort);
                     }
                 } catch (Exception e) {

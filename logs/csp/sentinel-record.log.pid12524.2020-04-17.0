@@ -1,0 +1,24 @@
+2020-04-17 15:23:35.470 INFO App name resolved: sentinel-demo-spring-webmvc-sample
+2020-04-17 15:23:35.473 INFO [SentinelConfig] Application type resolved: 0
+2020-04-17 15:23:35.478 INFO [InitExecutor] Found init func: com.imlaidian.cdt.sentinel.datasource.LDZookeeperDataSource
+2020-04-17 15:23:35.482 INFO [InitExecutor] Found init func: com.alibaba.csp.sentinel.metric.extension.MetricCallbackInit
+2020-04-17 15:23:35.485 INFO [InitExecutor] Found init func: com.alibaba.csp.sentinel.transport.init.CommandCenterInitFunc
+2020-04-17 15:23:35.488 INFO [InitExecutor] Found init func: com.alibaba.csp.sentinel.transport.init.HeartbeatSenderInitFunc
+2020-04-17 15:23:35.492 INFO [InitExecutor] Found init func: com.alibaba.csp.sentinel.init.ParamFlowStatisticSlotCallbackInit
+2020-04-17 15:23:35.502 INFO [SpiLoader] Found CommandCenter SPI: com.alibaba.csp.sentinel.transport.command.SimpleHttpCommandCenter with order 2147483647
+2020-04-17 15:23:35.504 INFO [CommandCenterProvider] CommandCenter resolved: com.alibaba.csp.sentinel.transport.command.SimpleHttpCommandCenter
+2020-04-17 15:23:35.537 INFO [CommandCenterInit] Starting command center: com.alibaba.csp.sentinel.transport.command.SimpleHttpCommandCenter
+2020-04-17 15:23:35.538 INFO [InitExecutor] Executing com.alibaba.csp.sentinel.transport.init.CommandCenterInitFunc with order -1
+2020-04-17 15:23:35.551 INFO [SimpleHttpHeartbeatSender] Default console address list retrieved: [/127.0.0.1:8083, /127.0.0.1:8084]
+2020-04-17 15:23:35.551 INFO [SpiLoader] Found HeartbeatSender SPI: com.alibaba.csp.sentinel.transport.heartbeat.SimpleHttpHeartbeatSender with order 2147483647
+2020-04-17 15:23:35.552 INFO [HeartbeatSenderProvider] HeartbeatSender activated: com.alibaba.csp.sentinel.transport.heartbeat.SimpleHttpHeartbeatSender
+2020-04-17 15:23:35.553 INFO [HeartbeatSenderInitFunc] Using heartbeat interval in Sentinel config property: 50000
+2020-04-17 15:23:35.555 INFO [HeartbeatSenderInit] HeartbeatSender started: com.alibaba.csp.sentinel.transport.heartbeat.SimpleHttpHeartbeatSender
+2020-04-17 15:23:35.556 INFO [InitExecutor] Executing com.alibaba.csp.sentinel.transport.init.HeartbeatSenderInitFunc with order -1
+2020-04-17 15:23:35.566 WARNING [InitExecutor] WARN: Initialization failed
+java.lang.IllegalArgumentException: Bad argument: serverAddr=[null], path=[/SENTINEL-GROUP/FLOW-RULES/sentinel-demo-spring-webmvc-sample-flow-rules]
+	at com.alibaba.csp.sentinel.datasource.zookeeper.ZookeeperDataSource.<init>(ZookeeperDataSource.java:52)
+	at com.imlaidian.cdt.sentinel.datasource.LDZookeeperDataSource.init(LDZookeeperDataSource.java:49)
+	at com.alibaba.csp.sentinel.init.InitExecutor.doInit(InitExecutor.java:53)
+	at com.imlaidian.cdt.sentinel.config.LDSentinelConfig.lambda$init$0(LDSentinelConfig.java:67)
+	at java.lang.Thread.run(Thread.java:748)

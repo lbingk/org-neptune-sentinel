@@ -14,6 +14,7 @@
 
        <module>neptune-sentinel</module>
        <module>neptune-sentinel-dashboard</module>
+       <module>neptune-sentinel-sample</module>
 
    </modules>
   <modelVersion>4.0.0</modelVersion>

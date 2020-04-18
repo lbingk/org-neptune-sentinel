@@ -15,36 +15,39 @@
  */
 package com.alibaba.csp.sentinel.dashboard.rule.zookeeper;
 
-import com.alibaba.csp.sentinel.dashboard.datasource.entity.rule.FlowRuleEntity;
-import com.alibaba.csp.sentinel.dashboard.rule.DynamicRulePublisher;
+import com.alibaba.csp.sentinel.dashboard.datasource.entity.rule.DegradeRuleEntity;
+import com.alibaba.csp.sentinel.dashboard.rule.DynamicRuleProvider;
 import com.alibaba.csp.sentinel.datasource.Converter;
-import com.alibaba.csp.sentinel.util.AssertUtil;
+import com.neptune.sentinel.RuleType;
 import org.apache.curator.framework.CuratorFramework;
-import org.apache.zookeeper.CreateMode;
 import org.apache.zookeeper.data.Stat;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
-import org.springframework.util.CollectionUtils;
 
+import java.util.ArrayList;
 import java.util.List;
 
-@Component("flowRuleZookeeperPublisher")
-public class FlowRuleZookeeperPublisher implements DynamicRulePublisher<List<FlowRuleEntity>> {
+@Component("degradeRuleZookeeperProvider")
+public class DegradeRuleZookeeperProvider implements DynamicRuleProvider<List<DegradeRuleEntity>> {
+
     @Autowired
     private CuratorFramework zkClient;
     @Autowired
-    private Converter<List<FlowRuleEntity>, String> converter;
+    private Converter<String, List<DegradeRuleEntity>> converter;
 
     @Override
-    public void publish(String app, List<FlowRuleEntity> rules) throws Exception {
-        AssertUtil.notEmpty(app, "app name cannot be empty");
-
-        String path = ZookeeperConfigUtil.getPath(app);
-        Stat stat = zkClient.checkExists().forPath(path);
-        if (stat == null) {
-            zkClient.create().creatingParentContainersIfNeeded().withMode(CreateMode.PERSISTENT).forPath(path, null);
+    public List<DegradeRuleEntity> getRules(String appName) throws Exception {
+        String zkPath = ZookeeperConfigUtil.getPath(appName, RuleType.DEGRADE);
+        Stat stat = zkClient.checkExists().forPath(zkPath);
+        if(stat == null){
+            return new ArrayList<>(0);
         }
-        byte[] data = CollectionUtils.isEmpty(rules) ? "[]".getBytes() : converter.convert(rules).getBytes();
-        zkClient.setData().forPath(path, data);
+        byte[] bytes = zkClient.getData().forPath(zkPath);
+        if (null == bytes || bytes.length == 0) {
+            return new ArrayList<>();
+        }
+        String s = new String(bytes);
+
+        return converter.convert(s);
     }
 }
